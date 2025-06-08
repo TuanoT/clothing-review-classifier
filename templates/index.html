@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clothing Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+<body>
+    <div class="container">
+        <form method="get" action="/" class="search-form">
+            <input type="text" name="search" placeholder="Search for clothes..." value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+
+        <h3>
+        {% if query_string %}
+            {{ items_found }} items found for '{{ query_string }}'
+        {% else %}
+            {{ items_found }} items
+        {% endif %}
+        </h3>
+
+        <div class="items">
+            {% for item in items %}
+                <a href="{{ url_for('item', item_id=item['Clothing ID']) }}">
+                <div class="item">
+                    <div class="item-header">
+                        <h3 style="margin: 0;">{{ item['Clothes Title'] }}</h3>
+                        <span class="clothing-id">#{{ item['Clothing ID'] }}</span>
+                    </div>
+                    <div class="item-header">
+                        <p>{{ item['Clothes Description'] }}</p>
+                        {% if item['Rating'] >= 1 %}
+                            <span>😄</span>
+                        {% elif item['Rating'] == 0 %}
+                            <span>🙂</span>
+                        {% else %}
+                            <span>😫</span>
+                        {% endif %}
+                    </div>
+                </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

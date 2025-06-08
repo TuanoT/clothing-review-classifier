@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ item['Clothes Title'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+<body>
+    <div class="item-page">
+
+        <a href="{{ url_for('index') }}" class="back-link">Back to search</a>
+        <div class="container">
+
+            <h1 class="item-title">{{ item['Clothes Title'] }}</h1>
+
+            <div class="item-details">
+                <div class="info-row">
+                    <span class="label">Clothing ID:</span>
+                    <span class="value">{{ item['Clothing ID'] }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Division:</span>
+                    <span class="value">{{ item['Division Name'] }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Department:</span>
+                    <span class="value">{{ item['Department Name'] }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Class: </span>
+                    <span class="value">{{ item['Class Name'] }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="value">{{ item['Clothes Description'] }}</span>
+                </div>
+            </div>
+            
+            <form class="review-form" method="POST" action="{{ url_for('submit_review', item_id=item['Clothing ID']) }}">
+                <input type="text" name="title" placeholder="Write a short title..." required>
+                <input type="text" name="review" placeholder="Write a review..." required>
+                <button type="submit">Submit</button>
+            </form>
+
+            {% if reviews %}
+            <div class="reviews">
+                <h3>Recent Reviews</h3>
+                {% for review in reviews %}
+                <div class="review">
+                    <div class="review-text">
+                        <b>{{ review['Title'] }}</b>
+                        <p>{{ review['Text'] }}</p>
+                    </div>
+                    <form method="POST" action="{{ url_for('toggle_recommendation') }}">
+                        <input type="hidden" name="review_id" value="{{ review['Review ID'] }}">
+                        <input type="hidden" name="recommended" value="{{ review['Recommended IND'] }}">
+                        <button type="submit" class="emoji-btn">
+                            {% if review['Recommended IND'] == 1 %}
+                                👍
+                            {% else %}
+                                👎
+                            {% endif %}
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+</body>
+</html>
